@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHP Creative — System Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-pale: #F5E6C0;
+  --gold-dark: #8B6914;
+  --black: #080808;
+  --dark: #0F0F0F;
+  --dark2: #151515;
+  --dark3: #1C1C1C;
+  --gray: #2A2A2A;
+  --light-gray: #777;
+  --muted: #444;
+  --white: #F8F5F0;
+  --cream: #EDE8DF;
+  --red: #C85252;
+  --green: #4A9E6F;
+  --blue: #4C7FC0;
+  --purple: #8A50B6;
+  --orange: #C07840;
+  --pink: #C05080;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--dark2); }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 24px 60px;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%),
+    var(--black);
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+}
+
+.hero-ornament {
+  position: absolute;
+  width: 600px; height: 600px;
+  border: 1px solid rgba(201,168,76,0.06);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: slowSpin 40s linear infinite;
+}
+.hero-ornament::before {
+  content: '';
+  position: absolute; inset: 60px;
+  border: 1px solid rgba(201,168,76,0.04);
+  border-radius: 50%;
+  animation: slowSpin 25s linear infinite reverse;
+}
+
+@keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.hero-content {
+  position: relative; z-index: 1;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 32px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 9vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--light-gray);
+  max-width: 520px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-scroll {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: fadeUp 0.8s 0.4s ease both;
+  margin-top: 16px;
+}
+.hero-scroll-line {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark));
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION WRAPPER ── */
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 120px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-full {
+  position: relative; z-index: 1;
+  padding: 120px 24px;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+.section-desc {
+  color: var(--light-gray);
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 560px;
+  font-weight: 300;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent);
+  margin: 0;
+}
+
+/* ── OVERVIEW CARDS ── */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 64px;
+}
+.overview-card {
+  background: var(--dark);
+  padding: 40px 36px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.overview-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.overview-card:hover { background: rgba(201,168,76,0.04); }
+.overview-card:hover::before { opacity: 1; }
+.overview-card-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 300;
+  color: rgba(201,168,76,0.15);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.overview-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.overview-card-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.overview-card-desc {
+  font-size: 0.88rem;
+  color: var(--light-gray);
+  line-height: 1.7;
+}
+
+/* ── FLOW SECTION ── */
+.flow-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 64px;
+  position: relative;
+}
+.flow-wrap::before {
+  content: '';
+  position: absolute;
+  left: 28px; top: 56px; bottom: 56px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-dark), rgba(201,168,76,0.1));
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 32px;
+  padding: 0 0 48px;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.flow-step.visible { opacity: 1; transform: none; }
+
+.flow-num {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--dark2);
+  border: 1px solid rgba(201,168,76,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--gold);
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+  transition: var(--transition);
+}
+.flow-step:hover .flow-num {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(201,168,76,0.2);
+}
+
+.flow-body {
+  padding-top: 12px;
+}
+.flow-step-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 8px;
+}
+.flow-step-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.flow-step-desc {
+  font-size: 0.92rem;
+  color: var(--light-gray);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+/* ── ROLE CARDS ── */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+}
+
+.role-card {
+  background: var(--dark2);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.role-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.role-card:hover { transform: translateY(-4px); }
+.role-card:hover::after { opacity: 1; }
+
+.role-card.moderator { border-color: rgba(138,80,182,0.2); }
+.role-card.moderator::after { background: linear-gradient(90deg, transparent, #8A50B6, transparent); }
+.role-card.moderator:hover { box-shadow: 0 20px 60px rgba(138,80,182,0.1); }
+
+.role-card.admin { border-color: rgba(201,168,76,0.2); }
+.role-card.admin::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.role-card.admin:hover { box-shadow: 0 20px 60px rgba(201,168,76,0.1); }
+
+.role-card.b2b { border-color: rgba(76,127,192,0.2); }
+.role-card.b2b::after { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+.role-card.b2b:hover { box-shadow: 0 20px 60px rgba(76,127,192,0.1); }
+
+.role-card.host { border-color: rgba(192,80,128,0.2); }
+.role-card.host::after { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
+.role-card.host:hover { box-shadow: 0 20px 60px rgba(192,80,128,0.1); }
+
+.role-card.marketing { border-color: rgba(74,158,111,0.2); }
+.role-card.marketing::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+.role-card.marketing:hover { box-shadow: 0 20px 60px rgba(74,158,111,0.1); }
+
+.role-card.guest { border-color: rgba(255,255,255,0.06); }
+.role-card.guest::after { background: linear-gradient(90deg, transparent, #aaa, transparent); }
+
+.role-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px;
+}
+.role-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.role-icon.mod-icon { background: rgba(138,80,182,0.15); color: #B47FD6; border: 1px solid rgba(138,80,182,0.2); }
+.role-icon.admin-icon { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+.role-icon.b2b-icon { background: rgba(76,127,192,0.15); color: #7BAEE8; border: 1px solid rgba(76,127,192,0.2); }
+.role-icon.host-icon { background: rgba(192,80,128,0.15); color: #E080A0; border: 1px solid rgba(192,80,128,0.2); }
+.role-icon.mkt-icon { background: rgba(74,158,111,0.15); color: #6ABEA0; border: 1px solid rgba(74,158,111,0.2); }
+.role-icon.guest-icon { background: rgba(255,255,255,0.05); color: #888; border: 1px solid rgba(255,255,255,0.08); }
+
+.role-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-weight: 400;
+}
+.badge-mod { background: rgba(138,80,182,0.15); color: #B47FD6; border: 1px solid rgba(138,80,182,0.3); }
+.badge-admin { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.25); }
+.badge-b2b { background: rgba(76,127,192,0.15); color: #7BAEE8; border: 1px solid rgba(76,127,192,0.25); }
+.badge-host { background: rgba(192,80,128,0.15); color: #E080A0; border: 1px solid rgba(192,80,128,0.25); }
+.badge-mkt { background: rgba(74,158,111,0.15); color: #6ABEA0; border: 1px solid rgba(74,158,111,0.25); }
+.badge-guest { background: rgba(255,255,255,0.05); color: #888; border: 1px solid rgba(255,255,255,0.1); }
+
+.role-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.role-desc {
+  font-size: 0.88rem;
+  color: var(--light-gray);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.role-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.role-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.83rem;
+  color: rgba(248,245,240,0.7);
+  line-height: 1.5;
+}
+.role-features li::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 6px;
+  opacity: 0.6;
+}
+
+/* ── MODULE SHOWCASE ── */
+.modules-bg {
+  background: var(--dark);
+  border-top: 1px solid rgba(201,168,76,0.08);
+  border-bottom: 1px solid rgba(201,168,76,0.08);
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 64px;
+}
+
+.module-item {
+  background: var(--dark);
+  padding: 32px 28px;
+  transition: var(--transition);
+  position: relative;
+}
+.module-item:hover {
+  background: rgba(201,168,76,0.03);
+}
+.module-icon {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.module-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.module-desc {
+  font-size: 0.8rem;
+  color: var(--light-gray);
+  line-height: 1.7;
+}
+.module-tag {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(201,168,76,0.08);
+  color: var(--gold-dark);
+}
+
+/* ── WORKFLOW TABS ── */
+.workflow-section { margin-top: 64px; }
+
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  margin-bottom: 48px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 14px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--white); }
+.tab-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeUp 0.4s ease; }
+
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.ws-card {
+  background: var(--dark2);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  transition: var(--transition);
+}
+.ws-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  transform: translateY(-2px);
+}
+.ws-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(201,168,76,0.15);
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.ws-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+.ws-desc {
+  font-size: 0.78rem;
+  color: var(--light-gray);
+  line-height: 1.7;
+}
+.ws-icon {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+}
+
+/* ── TIPS SECTION ── */
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+}
+.tip-card {
+  background: var(--dark2);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 14px;
+  padding: 28px 24px;
+  display: flex; gap: 18px;
+  transition: var(--transition);
+}
+.tip-card:hover {
+  border-color: rgba(201,168,76,0.15);
+  background: rgba(201,168,76,0.03);
+}
+.tip-icon-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.tip-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+.tip-desc {
+  font-size: 0.8rem;
+  color: var(--light-gray);
+  line-height: 1.7;
+}
+
+/* ── STATUS PILLS ── */
+.status-showcase {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: 16px;
+}
+.sp {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+.sp::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.sp-new { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.25); }
+.sp-new::before { background: var(--gold); }
+.sp-follow { background: rgba(76,127,192,0.12); color: #7BAEE8; border: 1px solid rgba(76,127,192,0.25); }
+.sp-follow::before { background: #7BAEE8; }
+.sp-deal { background: rgba(74,158,111,0.12); color: #6ABEA0; border: 1px solid rgba(74,158,111,0.25); }
+.sp-deal::before { background: #6ABEA0; }
+.sp-close { background: rgba(192,80,128,0.12); color: #E080A0; border: 1px solid rgba(192,80,128,0.25); }
+.sp-close::before { background: #E080A0; }
+.sp-done { background: rgba(138,80,182,0.12); color: #B47FD6; border: 1px solid rgba(138,80,182,0.25); }
+.sp-done::before { background: #B47FD6; }
+.sp-block { background: rgba(200,82,82,0.12); color: #E08080; border: 1px solid rgba(200,82,82,0.25); }
+.sp-block::before { background: #E08080; }
+
+/* ── CALLOUT ── */
+.callout {
+  background: rgba(201,168,76,0.05);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 24px 0;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.callout-icon { color: var(--gold); font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+.callout-text { font-size: 0.88rem; color: rgba(248,245,240,0.75); line-height: 1.7; }
+.callout-text strong { color: var(--white); }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 80px 24px 48px;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.08);
+  position: relative;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.footer-logo span { color: var(--gold); }
+.footer-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+.footer-link {
+  padding: 8px 20px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  border: none; background: none; font-family: var(--font-body);
+}
+.footer-link:hover { color: var(--gold); }
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: rgba(68,68,68,0.8);
+  text-transform: uppercase;
+}
+
+/* ── STICKY NAV ── */
+.sticky-nav {
+  position: fixed;
+  top: 24px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201,168,76,0.12);
+  border-radius: 100px;
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+.sticky-nav.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin-right: 12px;
+}
+.nav-logo span { color: var(--gold); }
+.nav-dots {
+  display: flex; gap: 4px;
+}
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gray);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.nav-dot.active { background: var(--gold); }
+.nav-items {
+  display: flex; gap: 4px;
+}
+.nav-item-btn {
+  padding: 5px 14px;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 100px;
+  transition: var(--transition);
+}
+.nav-item-btn:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+.nav-item-btn.active { color: var(--gold); background: rgba(201,168,76,0.08); }
+
+/* ── SCROLL OBSERVER ── */
+.observe-me {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.observe-me.visible { opacity: 1; transform: none; }
+
+@media (max-width: 768px) {
+  .modules-grid { grid-template-columns: 1fr; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .flow-wrap::before { display: none; }
+  .flow-step { grid-template-columns: 40px 1fr; gap: 16px; }
+  .sticky-nav .nav-items { display: none; }
+  .hero-ornament { width: 300px; height: 300px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Sticky Nav -->
+<nav class="sticky-nav" id="stickyNav">
+  <div class="nav-logo">DHP <span>Creative</span></div>
+  <div class="nav-items">
+    <button class="nav-item-btn active" onclick="scrollToSection('intro')">Intro</button>
+    <button class="nav-item-btn" onclick="scrollToSection('alur')">Alur Login</button>
+    <button class="nav-item-btn" onclick="scrollToSection('roles')">Role</button>
+    <button class="nav-item-btn" onclick="scrollToSection('modul')">Modul</button>
+    <button class="nav-item-btn" onclick="scrollToSection('workflow')">Workflow</button>
+    <button class="nav-item-btn" onclick="scrollToSection('tips')">Tips</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-ornament"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>System Guide — v21</span>
+    </div>
+
+    <h1 class="hero-title">
+      DHP Creative
+      <em>Plan System</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Panduan lengkap memahami sistem manajemen internal DHP Creative — dari alur login, peran tim, hingga cara kerja setiap modul.
+    </p>
+
+    <div class="hero-scroll" onclick="scrollToSection('intro')">
+      <div class="hero-scroll-line"></div>
+      <span>Mulai Membaca</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ INTRO / OVERVIEW ═══ -->
+<section class="section" id="intro">
+  <div class="observe-me">
+    <div class="section-label">Tentang Sistem</div>
+    <h2 class="section-title">Satu platform,<br><em>banyak peran</em></h2>
+    <p class="section-desc">
+      DHP Creative Plan System adalah platform manajemen terpusat yang menghubungkan seluruh tim — mulai dari sales, host live, marketing, hingga manajemen puncak — dalam satu ekosistem yang terstruktur dan real-time.
+    </p>
+  </div>
+
+  <div class="overview-grid observe-me">
+    <div class="overview-card">
+      <div class="overview-card-num">01</div>
+      <div class="overview-card-icon"><i class="fas fa-users-gear"></i></div>
+      <div class="overview-card-title">Multi-Role Access</div>
+      <div class="overview-card-desc">Enam level akses berbeda — setiap peran melihat dan mengelola data yang relevan dengan tugasnya saja.</div>
+    </div>
+    <div class="overview-card">
+      <div class="overview-card-num">02</div>
+      <div class="overview-card-icon"><i class="fas fa-database"></i></div>
+      <div class="overview-card-title">Data Real-Time</div>
+      <div class="overview-card-desc">Semua data tersinkronisasi langsung via cloud. Tidak ada delay, tidak ada data ganda, selalu up-to-date.</div>
+    </div>
+    <div class="overview-card">
+      <div class="overview-card-num">03</div>
+      <div class="overview-card-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="overview-card-title">Dashboard & Analitik</div>
+      <div class="overview-card-desc">Visualisasi performa tim secara menyeluruh — dari lead pipeline, GMV host live, hingga efektivitas budget marketing.</div>
+    </div>
+    <div class="overview-card">
+      <div class="overview-card-num">04</div>
+      <div class="overview-card-icon"><i class="fas fa-bell"></i></div>
+      <div class="overview-card-title">Notifikasi Sistem</div>
+      <div class="overview-card-desc">Pemberitahuan otomatis untuk pengingat laporan, update status, dan deadline yang perlu diperhatikan.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ALUR LOGIN ═══ -->
+<section class="section" id="alur">
+  <div class="observe-me">
+    <div class="section-label">Cara Masuk</div>
+    <h2 class="section-title">Alur Login<br><em>Step by Step</em></h2>
+    <p class="section-desc">
+      Sistem menggunakan autentikasi berbasis peran. Setiap anggota tim masuk sesuai dengan tanggung jawabnya masing-masing.
+    </p>
+  </div>
+
+  <div class="flow-wrap">
+
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-body">
+        <div class="flow-step-label">Langkah Pertama</div>
+        <div class="flow-step-title">Buka Platform</div>
+        <div class="flow-step-desc">
+          Akses DHP Creative Plan System melalui browser. Setelah loading selesai, halaman login akan tampil otomatis dengan tampilan elegan bertema gelap. Tidak perlu membuat akun — sistem menggunakan akun terpusat per peran.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-body">
+        <div class="flow-step-label">Langkah Kedua</div>
+        <div class="flow-step-title">Pilih Peran Anda</div>
+        <div class="flow-step-desc">
+          Pilih salah satu dari enam peran yang tersedia: <strong>Moderator</strong>, <strong>Admin</strong>, <strong>B2B</strong>, <strong>Host Live</strong>, <strong>Marketing</strong>, atau <strong>Guest</strong>. Klik kartu peran sesuai posisi Anda di tim. Kartu akan aktif (bercahaya) sebagai konfirmasi pilihan.
+        </div>
+        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="role-badge badge-mod">Moderator</span>
+          <span class="role-badge badge-admin">Admin</span>
+          <span class="role-badge badge-b2b">B2B</span>
+          <span class="role-badge badge-host">Host</span>
+          <span class="role-badge badge-mkt">Marketing</span>
+          <span class="role-badge badge-guest">Guest</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-body">
+        <div class="flow-step-label">Langkah Ketiga</div>
+        <div class="flow-step-title">Masukkan Password</div>
+        <div class="flow-step-desc">
+          Setelah memilih peran, halaman bergeser ke form autentikasi. Masukkan password yang telah diberikan oleh admin sistem. Password bersifat rahasia dan tidak dibagikan ke publik. Untuk role <strong>Host Live</strong>, pilih dulu nama akun (Nina / Sekar) sebelum memasukkan password.
+        </div>
+        <div class="callout" style="margin-top: 16px;">
+          <i class="fas fa-shield-halved callout-icon"></i>
+          <div class="callout-text"><strong>Keamanan:</strong> Jangan bagikan password kepada siapapun di luar tim. Setiap peran memiliki akses berbeda yang telah disesuaikan.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-body">
+        <div class="flow-step-label">Langkah Keempat</div>
+        <div class="flow-step-title">Masuk ke Dashboard</div>
+        <div class="flow-step-desc">
+          Login berhasil — sistem menyambut Anda dengan pesan inspiratif yang dipersonalisasi. Dashboard langsung terbuka menampilkan data dan fitur sesuai peran Anda. Sidebar navigasi di sebelah kiri menjadi panduan utama berpindah antar modul.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" style="padding-bottom: 0;">
+      <div class="flow-num">✓</div>
+      <div class="flow-body">
+        <div class="flow-step-label">Mode Khusus</div>
+        <div class="flow-step-title">Guest — Tanpa Password</div>
+        <div class="flow-step-desc">
+          Role <strong>Guest</strong> tidak memerlukan password. Klik "Lihat Dashboard" untuk langsung masuk dalam mode baca. Guest dapat melihat analitik, data tim, dan dashboard marketing — tetapi tidak dapat membuat, mengedit, atau menghapus data apapun.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ROLES ═══ -->
+<section class="section" id="roles">
+  <div class="observe-me">
+    <div class="section-label">Struktur Tim</div>
+    <h2 class="section-title">Enam Peran,<br><em>Satu Tujuan</em></h2>
+    <p class="section-desc">
+      Setiap peran dirancang dengan akses dan tanggung jawab yang spesifik agar alur kerja tim tetap terstruktur dan efisien.
+    </p>
+  </div>
+
+  <div class="roles-grid observe-me">
+
+    <!-- MODERATOR -->
+    <div class="role-card moderator">
+      <div class="role-header">
+        <div class="role-icon mod-icon"><i class="fas fa-crown"></i></div>
+        <div>
+          <div class="role-name">Moderator</div>
+          <span class="role-badge badge-mod">Akses Penuh</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Level tertinggi dalam sistem. Moderator memiliki visibilitas dan kendali penuh atas seluruh data tim, dapat mengatur jadwal, menyetujui laporan, dan mengirim notifikasi ke semua anggota.
+      </div>
+      <ul class="role-features">
+        <li>Dashboard semua role secara bersamaan</li>
+        <li>Kelola kalender iklan & jadwal live host</li>
+        <li>ACC & validasi laporan harian host</li>
+        <li>Update target bulanan host live</li>
+        <li>Lihat & kelola semua data leads</li>
+        <li>Kirim notifikasi ke seluruh tim</li>
+        <li>Akses dashboard marketing read-only</li>
+      </ul>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="role-card admin">
+      <div class="role-header">
+        <div class="role-icon admin-icon"><i class="fas fa-user-tie"></i></div>
+        <div>
+          <div class="role-name">Admin</div>
+          <span class="role-badge badge-admin">Sales Internal</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Mengelola leads dan pipeline penjualan untuk jalur internal. Admin fokus pada data customers, kalender leads, analitik performa, dan input laporan harian aktivitas mereka.
+      </div>
+      <ul class="role-features">
+        <li>Dashboard personal dengan KPI hari ini</li>
+        <li>Kalender leads — lihat & buat jadwal</li>
+        <li>Analitik performa sales admin</li>
+        <li>Tabel data customers lengkap</li>
+        <li>Input laporan harian kegiatan</li>
+      </ul>
+    </div>
+
+    <!-- B2B -->
+    <div class="role-card b2b">
+      <div class="role-header">
+        <div class="role-icon b2b-icon"><i class="fas fa-handshake"></i></div>
+        <div>
+          <div class="role-name">B2B</div>
+          <span class="role-badge badge-b2b">Business-to-Business</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Khusus mengelola relasi dan pipeline kerjasama business-to-business. Memiliki sistem leads, kalender, dan analitik yang terpisah dari jalur admin untuk menjaga fokus.
+      </div>
+      <ul class="role-features">
+        <li>Dashboard B2B dengan progress pipeline</li>
+        <li>Kalender leads B2B tersendiri</li>
+        <li>Analitik konversi & performa B2B</li>
+        <li>Tabel customers B2B dengan status deal</li>
+        <li>Input laporan harian aktivitas B2B</li>
+      </ul>
+    </div>
+
+    <!-- HOST -->
+    <div class="role-card host">
+      <div class="role-header">
+        <div class="role-icon host-icon"><i class="fas fa-video"></i></div>
+        <div>
+          <div class="role-name">Host Live</div>
+          <span class="role-badge badge-host">Nina / Sekar</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Dua akun host tersedia: Nina dan Sekar. Masing-masing memiliki target GMV bulanan sendiri. Host dapat melihat jadwal live, mencatat laporan per sesi, dan memantau progress menuju target.
+      </div>
+      <ul class="role-features">
+        <li>Dashboard performa live dengan visual target</li>
+        <li>Kalender jadwal live bulanan</li>
+        <li>Input laporan per sesi live (GMV, durasi)</li>
+        <li>Pantau progress target bulanan real-time</li>
+        <li>Kutipan motivasi personal setiap sesi</li>
+      </ul>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="role-card marketing">
+      <div class="role-header">
+        <div class="role-icon mkt-icon"><i class="fas fa-chart-line"></i></div>
+        <div>
+          <div class="role-name">Marketing</div>
+          <span class="role-badge badge-mkt">Strategi & Budget</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Mengelola ekosistem marketing secara menyeluruh — dari perencanaan anggaran bulanan hingga tracking performa KOL & affiliate yang digunakan dalam kampanye produk.
+      </div>
+      <ul class="role-features">
+        <li>Dashboard marketing dengan ringkasan bulanan</li>
+        <li>Kelola budget marketing per periode</li>
+        <li>Input & track KOL/affiliate per kampanye</li>
+        <li>Monitor ERF (Engagement Rate Factor) tiap KOL</li>
+        <li>Lacak progress per status konten</li>
+      </ul>
+    </div>
+
+    <!-- GUEST -->
+    <div class="role-card guest">
+      <div class="role-header">
+        <div class="role-icon guest-icon"><i class="fas fa-eye"></i></div>
+        <div>
+          <div class="role-name">Guest</div>
+          <span class="role-badge badge-guest">Read Only</span>
+        </div>
+      </div>
+      <div class="role-desc">
+        Mode tamu tanpa password. Ideal untuk stakeholder, mitra, atau pihak yang perlu memantau data tanpa hak edit. Akses terbatas namun informatif.
+      </div>
+      <ul class="role-features">
+        <li>Analitik semua role dalam satu halaman</li>
+        <li>Pantau semua task tim lintas divisi</li>
+        <li>Dashboard marketing dalam mode baca</li>
+        <li>Tidak dapat membuat atau mengubah data</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ MODUL ═══ -->
+<div class="modules-bg section-full" id="modul">
+  <div class="section" style="padding-top: 0; padding-bottom: 0;">
+    <div class="observe-me">
+      <div class="section-label">Fitur Sistem</div>
+      <h2 class="section-title">Modul-modul<br><em>Utama</em></h2>
+      <p class="section-desc">
+        Sistem terdiri dari beberapa modul yang saling terintegrasi. Setiap modul dirancang untuk satu fungsi spesifik dalam ekosistem kerja DHP Creative.
+      </p>
+    </div>
+
+    <div class="modules-grid observe-me">
+
+      <div class="module-item">
+        <span class="module-icon">📊</span>
+        <div class="module-title">Dashboard & Analitik</div>
+        <div class="module-desc">Ringkasan performa real-time dalam bentuk grafik, kartu statistik, dan progress bar yang mudah dipahami sekilas pandang.</div>
+        <span class="module-tag">Semua Role</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">📅</span>
+        <div class="module-title">Kalender Leads</div>
+        <div class="module-desc">Tampilan kalender interaktif untuk menjadwalkan follow-up, meeting, dan aktivitas sales dengan kode warna status leads.</div>
+        <span class="module-tag">Admin · B2B · Moderator</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">👥</span>
+        <div class="module-title">Data Customers</div>
+        <div class="module-desc">Tabel manajemen leads lengkap dengan status pipeline, histori follow-up, metode kontak, dan filter pencarian cepat.</div>
+        <span class="module-tag">Admin · B2B · Moderator</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">🎥</span>
+        <div class="module-title">Jadwal Live Host</div>
+        <div class="module-desc">Moderator mengatur jadwal live per host per bulan. Host dapat melihat jadwal mereka dan menginput laporan per sesi.</div>
+        <span class="module-tag">Host · Moderator</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">📝</span>
+        <div class="module-title">Input Laporan Harian</div>
+        <div class="module-desc">Form input terstruktur untuk laporan aktivitas harian. Admin & B2B input aktivitas sales, Host input GMV per sesi live.</div>
+        <span class="module-tag">Admin · B2B · Host</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">🎯</span>
+        <div class="module-title">Target & Progress Host</div>
+        <div class="module-desc">Visualisasi target GMV bulanan dengan progress bar, persentase pencapaian, dan animasi perayaan saat target terpenuhi.</div>
+        <span class="module-tag">Host · Moderator</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">💰</span>
+        <div class="module-title">Budget Marketing</div>
+        <div class="module-desc">Perencanaan dan monitoring anggaran marketing per bulan. Lacak pengeluaran aktual versus alokasi yang direncanakan.</div>
+        <span class="module-tag">Marketing · Moderator · Guest</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">🤝</span>
+        <div class="module-title">KOL & Affiliate</div>
+        <div class="module-desc">Manajemen kolaborasi dengan Key Opinion Leader dan afiliasi. Catat tier, platform, progress konten, dan rating performa.</div>
+        <span class="module-tag">Marketing</span>
+      </div>
+
+      <div class="module-item">
+        <span class="module-icon">🔔</span>
+        <div class="module-title">Notifikasi Sistem</div>
+        <div class="module-desc">Moderator dapat mengirim pengumuman ke seluruh tim. Semua pengguna menerima notifikasi real-time dengan panel notifikasi bawaan.</div>
+        <span class="module-tag">Semua Role</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WORKFLOW TABS ═══ -->
+<section class="section" id="workflow">
+  <div class="observe-me">
+    <div class="section-label">Cara Kerja</div>
+    <h2 class="section-title">Workflow<br><em>per Divisi</em></h2>
+    <p class="section-desc">
+      Pelajari alur kerja harian masing-masing divisi dalam sistem — dari input data hingga laporan akhir.
+    </p>
+  </div>
+
+  <div class="workflow-section observe-me">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('admin-flow')">Admin Sales</button>
+      <button class="tab-btn" onclick="switchTab('b2b-flow')">B2B Sales</button>
+      <button class="tab-btn" onclick="switchTab('host-flow')">Host Live</button>
+      <button class="tab-btn" onclick="switchTab('mkt-flow')">Marketing</button>
+      <button class="tab-btn" onclick="switchTab('mod-flow')">Moderator</button>
+    </div>
+
+    <!-- ADMIN FLOW -->
+    <div class="tab-content active" id="admin-flow">
+      <div class="workflow-steps">
+        <div class="ws-card">
+          <div class="ws-num">01</div>
+          <div class="ws-icon" style="background:rgba(201,168,76,0.1); color:var(--gold);"><i class="fas fa-plus"></i></div>
+          <div class="ws-title">Tambah Lead Baru</div>
+          <div class="ws-desc">Masukkan data customer baru ke dalam sistem — nama, kontak, produk yang diminati, dan sumber lead.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">02</div>
+          <div class="ws-icon" style="background:rgba(76,127,192,0.1); color:#7BAEE8;"><i class="fas fa-calendar"></i></div>
+          <div class="ws-title">Jadwalkan Follow-Up</div>
+          <div class="ws-desc">Set jadwal follow-up di kalender leads. Sistem akan menampilkan reminder sesuai tanggal yang ditentukan.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">03</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-phone"></i></div>
+          <div class="ws-title">Update Status</div>
+          <div class="ws-desc">Setelah interaksi, perbarui status lead: New → Follow-Up → Closing → Deal atau Blocked sesuai perkembangan.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">04</div>
+          <div class="ws-icon" style="background:rgba(74,158,111,0.1); color:#6ABEA0;"><i class="fas fa-file-pen"></i></div>
+          <div class="ws-title">Input Laporan Harian</div>
+          <div class="ws-desc">Di akhir hari, isi laporan aktivitas sales harian — jumlah kontак, follow-up dilakukan, dan hasil yang didapat.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">05</div>
+          <div class="ws-icon" style="background:rgba(138,80,182,0.1); color:#B47FD6;"><i class="fas fa-chart-bar"></i></div>
+          <div class="ws-title">Pantau Analitik</div>
+          <div class="ws-desc">Lihat grafik performa mingguan dan bulanan di halaman analitik — konversi rate, status distribusi, tren leads.</div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top: 24px;">
+        <i class="fas fa-lightbulb callout-icon"></i>
+        <div class="callout-text"><strong>Status Lead yang Tersedia:</strong>
+          <div class="status-showcase" style="margin-top: 10px;">
+            <span class="sp sp-new">Baru Masuk</span>
+            <span class="sp sp-follow">Follow-Up</span>
+            <span class="sp sp-close">Closing</span>
+            <span class="sp sp-deal">Deal Selesai</span>
+            <span class="sp sp-block">Diblokir</span>
+            <span class="sp sp-done">Reschedule</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2B FLOW -->
+    <div class="tab-content" id="b2b-flow">
+      <div class="workflow-steps">
+        <div class="ws-card">
+          <div class="ws-num">01</div>
+          <div class="ws-icon" style="background:rgba(76,127,192,0.1); color:#7BAEE8;"><i class="fas fa-building"></i></div>
+          <div class="ws-title">Identifikasi Prospek B2B</div>
+          <div class="ws-desc">Catat perusahaan atau brand yang berpotensi untuk diajak kerjasama — lengkap dengan PIC dan info kontak.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">02</div>
+          <div class="ws-icon" style="background:rgba(201,168,76,0.1); color:var(--gold);"><i class="fas fa-handshake"></i></div>
+          <div class="ws-title">Approach & Negosiasi</div>
+          <div class="ws-desc">Lakukan pendekatan awal, presentasi, dan negosiasi. Update status di sistem sesuai tahap yang dicapai.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">03</div>
+          <div class="ws-icon" style="background:rgba(74,158,111,0.1); color:#6ABEA0;"><i class="fas fa-file-signature"></i></div>
+          <div class="ws-title">Closing Deal</div>
+          <div class="ws-desc">Tandai status sebagai "Closing" saat memasuki tahap final. Dokumentasikan nilai deal dan catatan penting.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">04</div>
+          <div class="ws-icon" style="background:rgba(138,80,182,0.1); color:#B47FD6;"><i class="fas fa-file-pen"></i></div>
+          <div class="ws-title">Laporan Harian B2B</div>
+          <div class="ws-desc">Input aktivitas B2B harian — jumlah perusahaan dihubungi, pertemuan berlangsung, dan prospek aktif saat ini.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">05</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-trophy"></i></div>
+          <div class="ws-title">Evaluasi Pipeline</div>
+          <div class="ws-desc">Gunakan halaman analitik B2B untuk mengevaluasi konversi pipeline dan mengidentifikasi hambatan dalam proses.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOST FLOW -->
+    <div class="tab-content" id="host-flow">
+      <div class="workflow-steps">
+        <div class="ws-card">
+          <div class="ws-num">01</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-calendar-check"></i></div>
+          <div class="ws-title">Cek Jadwal Live</div>
+          <div class="ws-desc">Buka halaman kalender untuk melihat jadwal live hari ini — jumlah sesi, jam mulai, dan durasi yang direncanakan.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">02</div>
+          <div class="ws-icon" style="background:rgba(201,168,76,0.1); color:var(--gold);"><i class="fas fa-video"></i></div>
+          <div class="ws-title">Jalankan Sesi Live</div>
+          <div class="ws-desc">Lakukan sesi live sesuai jadwal. Catat GMV yang tercapai, jumlah viewer, dan durasi aktual sesi.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">03</div>
+          <div class="ws-icon" style="background:rgba(74,158,111,0.1); color:#6ABEA0;"><i class="fas fa-keyboard"></i></div>
+          <div class="ws-title">Input Laporan Sesi</div>
+          <div class="ws-desc">Masukkan data per sesi di halaman "Input Report Harian" — GMV, waktu mulai & selesai, dan catatan jika ada kendala.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">04</div>
+          <div class="ws-icon" style="background:rgba(138,80,182,0.1); color:#B47FD6;"><i class="fas fa-clock"></i></div>
+          <div class="ws-title">Deadline Laporan</div>
+          <div class="ws-desc">Perhatikan deadline pengisian laporan. Sistem akan memberikan peringatan visual jika laporan belum diisi mendekati batas waktu.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">05</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-bullseye"></i></div>
+          <div class="ws-title">Pantau Target Bulanan</div>
+          <div class="ws-desc">Halaman target menampilkan progress GMV secara visual — persentase pencapaian dan jarak menuju target bulan ini.</div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top: 24px;">
+        <i class="fas fa-star callout-icon"></i>
+        <div class="callout-text"><strong>Perayaan Target:</strong> Saat target bulanan tercapai, sistem menampilkan animasi perayaan khusus sebagai apresiasi atas kerja keras host. 🏆</div>
+      </div>
+    </div>
+
+    <!-- MARKETING FLOW -->
+    <div class="tab-content" id="mkt-flow">
+      <div class="workflow-steps">
+        <div class="ws-card">
+          <div class="ws-num">01</div>
+          <div class="ws-icon" style="background:rgba(74,158,111,0.1); color:#6ABEA0;"><i class="fas fa-wallet"></i></div>
+          <div class="ws-title">Set Budget Bulanan</div>
+          <div class="ws-desc">Awal bulan, tentukan total alokasi anggaran marketing. Budget ini menjadi acuan untuk semua aktivitas di bulan tersebut.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">02</div>
+          <div class="ws-icon" style="background:rgba(201,168,76,0.1); color:var(--gold);"><i class="fas fa-user-group"></i></div>
+          <div class="ws-title">Input Data KOL</div>
+          <div class="ws-desc">Tambahkan data KOL atau afiliasi yang digunakan — nama, tier (nano/micro/macro), platform, produk, dan metode pembayaran.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">03</div>
+          <div class="ws-icon" style="background:rgba(76,127,192,0.1); color:#7BAEE8;"><i class="fas fa-arrow-trend-up"></i></div>
+          <div class="ws-title">Track Progress Konten</div>
+          <div class="ws-desc">Update status konten per KOL: Sudah Tektokan → Deal → Produk Dikirim → Konten Dibuat → Upload → Selesai.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">04</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-percent"></i></div>
+          <div class="ws-title">Input ERF & Rating</div>
+          <div class="ws-desc">Setelah konten tayang, input Engagement Rate Factor (Instagram & TikTok) dan berikan rating performa KOL tersebut.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">05</div>
+          <div class="ws-icon" style="background:rgba(138,80,182,0.1); color:#B47FD6;"><i class="fas fa-chart-pie"></i></div>
+          <div class="ws-title">Evaluasi Dashboard</div>
+          <div class="ws-desc">Pantau dashboard marketing untuk melihat realisasi vs budget, distribusi pengeluaran, dan efektivitas kolaborasi KOL.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOD FLOW -->
+    <div class="tab-content" id="mod-flow">
+      <div class="workflow-steps">
+        <div class="ws-card">
+          <div class="ws-num">01</div>
+          <div class="ws-icon" style="background:rgba(138,80,182,0.1); color:#B47FD6;"><i class="fas fa-chart-pie"></i></div>
+          <div class="ws-title">Monitor Dashboard</div>
+          <div class="ws-desc">Pantau dashboard semua role dalam satu tampilan — performa admin, B2B, host, dan marketing secara bersamaan.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">02</div>
+          <div class="ws-icon" style="background:rgba(201,168,76,0.1); color:var(--gold);"><i class="fas fa-calendar-plus"></i></div>
+          <div class="ws-title">Atur Jadwal Host</div>
+          <div class="ws-desc">Buat dan kelola jadwal live untuk Nina dan Sekar per bulan — tentukan hari, jumlah sesi, dan tandai hari libur.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">03</div>
+          <div class="ws-icon" style="background:rgba(74,158,111,0.1); color:#6ABEA0;"><i class="fas fa-clipboard-check"></i></div>
+          <div class="ws-title">Validasi Laporan Host</div>
+          <div class="ws-desc">Review dan setujui laporan harian yang disubmit host. Moderator dapat membuka laporan yang terkunci jika diperlukan koreksi.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">04</div>
+          <div class="ws-icon" style="background:rgba(192,80,128,0.1); color:#E080A0;"><i class="fas fa-bullseye"></i></div>
+          <div class="ws-title">Update Target</div>
+          <div class="ws-desc">Set atau perbarui target GMV bulanan untuk masing-masing host sesuai kondisi dan kapasitas tim.</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-num">05</div>
+          <div class="ws-icon" style="background:rgba(76,127,192,0.1); color:#7BAEE8;"><i class="fas fa-bell"></i></div>
+          <div class="ws-title">Kirim Notifikasi</div>
+          <div class="ws-desc">Buat dan kirim pengumuman atau reminder ke seluruh tim melalui modul notifikasi. Semua user menerima secara real-time.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ TIPS ═══ -->
+<section class="section" id="tips">
+  <div class="observe-me">
+    <div class="section-label">Best Practice</div>
+    <h2 class="section-title">Tips Penggunaan<br><em>Terbaik</em></h2>
+    <p class="section-desc">
+      Panduan singkat agar pengalaman menggunakan sistem ini maksimal dan data tim selalu akurat.
+    </p>
+  </div>
+
+  <div class="tips-grid observe-me">
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-clock"></i></div>
+      <div>
+        <div class="tip-title">Input Laporan di Hari yang Sama</div>
+        <div class="tip-desc">Selalu masukkan laporan harian di hari yang sama dengan aktivitas. Laporan yang terlambat bisa terkunci dan memerlukan approval moderator untuk dibuka.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-arrow-up-from-bracket"></i></div>
+      <div>
+        <div class="tip-title">Update Status Lead Segera</div>
+        <div class="tip-desc">Perbarui status lead segera setelah ada interaksi. Data yang akurat menghasilkan analitik yang dapat dipercaya untuk pengambilan keputusan.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-bell"></i></div>
+      <div>
+        <div class="tip-title">Aktifkan Panel Notifikasi</div>
+        <div class="tip-desc">Cek notifikasi secara rutin dengan klik ikon lonceng di pojok kanan atas. Notifikasi penting dari moderator bisa berisi instruksi atau update sistem.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-mobile-screen"></i></div>
+      <div>
+        <div class="tip-title">Akses dari Mobile Friendly</div>
+        <div class="tip-desc">Sistem responsif dan dapat diakses dari perangkat mobile. Gunakan tombol menu (☰) di pojok kiri atas untuk membuka sidebar navigasi saat di HP.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-shield-halved"></i></div>
+      <div>
+        <div class="tip-title">Jaga Kerahasiaan Password</div>
+        <div class="tip-desc">Password setiap peran bersifat confidential. Jangan bagikan ke pihak luar tim. Jika ada dugaan kebocoran, segera hubungi admin sistem.</div>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon-wrap"><i class="fas fa-whatsapp" style="font-family: 'Font Awesome 6 Brands';"></i></div>
+      <div>
+        <div class="tip-title">Butuh Bantuan Teknis?</div>
+        <div class="tip-desc">Jika mengalami kendala teknis, gunakan tombol "Bantuan" di pojok kanan atas untuk langsung terhubung ke dukungan teknis DHP Creative via WhatsApp.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing callout -->
+  <div class="callout observe-me" style="margin-top: 48px; border-left-color: var(--gold);">
+    <i class="fas fa-gem callout-icon"></i>
+    <div class="callout-text">
+      <strong>Sistem ini dirancang untuk mendukung, bukan memperumit.</strong> Setiap fitur hadir karena ada kebutuhan nyata dari tim. Jika ada saran peningkatan atau fitur yang dibutuhkan, sampaikan melalui jalur komunikasi internal DHP Creative.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-logo">DHP <span>Creative</span></div>
+  <div class="footer-tagline">Plan System — Internal User Guide</div>
+  <div class="footer-links">
+    <button class="footer-link" onclick="scrollToSection('intro')">Tentang Sistem</button>
+    <button class="footer-link" onclick="scrollToSection('alur')">Alur Login</button>
+    <button class="footer-link" onclick="scrollToSection('roles')">Peran Tim</button>
+    <button class="footer-link" onclick="scrollToSection('modul')">Modul</button>
+    <button class="footer-link" onclick="scrollToSection('workflow')">Workflow</button>
+    <button class="footer-link" onclick="scrollToSection('tips')">Tips</button>
+  </div>
+  <div class="footer-copy">© DHP Creative · Plan System v21 · Internal Documentation</div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  dot.style.left = mouseX + 'px';
+  dot.style.top = mouseY + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .role-card, .overview-card, .ws-card, .tip-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width = '56px'; ring.style.height = '56px';
+    ring.style.borderColor = 'rgba(201,168,76,0.6)';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '36px'; ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(201,168,76,0.4)';
+  });
+});
+
+/* ── STICKY NAV ── */
+const stickyNav = document.getElementById('stickyNav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) stickyNav.classList.add('visible');
+  else stickyNav.classList.remove('visible');
+  updateActiveNav();
+});
+
+function updateActiveNav() {
+  const sections = ['intro','alur','roles','modul','workflow','tips'];
+  const btns = document.querySelectorAll('.nav-item-btn');
+  let current = 'intro';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 200) current = id;
+  });
+  btns.forEach((btn, i) => {
+    btn.classList.toggle('active', sections[i] === current);
+  });
+}
+
+/* ── SCROLL TO ── */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── SCROLL OBSERVER ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.observe-me, .flow-step').forEach(el => observer.observe(el));
+
+/* ── TABS ── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+/* ── STAGGERED FLOW STEPS ── */
+const flowSteps = document.querySelectorAll('.flow-step');
+const flowObs = new IntersectionObserver(entries => {
+  entries.forEach((e, idx) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), idx * 120);
+    }
+  });
+}, { threshold: 0.1 });
+flowSteps.forEach(s => flowObs.observe(s));
+</script>
+</body>
+</html>
